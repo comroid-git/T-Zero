@@ -1,5 +1,8 @@
 package de.kaleidox.tzero;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -16,6 +19,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import de.kaleidox.javacord.util.ui.embed.DefaultEmbedFactory;
+import de.kaleidox.util.files.FileProvider;
 
 import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
@@ -33,21 +37,32 @@ import org.jetbrains.annotations.Nullable;
 public enum TimeListener implements MessageCreateListener {
     INSTANCE;
 
-    public static final String CLOCK_EMOJI = "⏰";
-    public static final Pattern TIME_PATTERN = Pattern.compile(".*?(\\s(?<hour>([012]?\\d)))([:.\\s](?<minute>\\d{2}))?(\\s??(?<ampm>[ap]m))?.*?");
-    public static final DateTimeFormatter FORMATTER_DAY = new DateTimeFormatterBuilder()
-            .appendValue(ChronoField.YEAR)
-            .appendLiteral('-')
-            .appendValue(ChronoField.MONTH_OF_YEAR)
-            .appendLiteral('-')
-            .appendValue(ChronoField.DAY_OF_MONTH)
-            .appendLiteral(' ')
-            .appendValue(ChronoField.HOUR_OF_DAY)
-            .appendLiteral(':')
-            .appendValue(ChronoField.MINUTE_OF_HOUR)
-            .appendLiteral(' ')
-            .appendZoneOrOffsetId()
-            .toFormatter();
+    public static final String CLOCK_EMOJI;
+    public static final Pattern TIME_PATTERN;
+    public static final DateTimeFormatter FORMATTER_DAY;
+
+    static {
+        try {
+            CLOCK_EMOJI = "⏰";
+            TIME_PATTERN = Pattern.compile(new BufferedReader(
+                    new FileReader(FileProvider.getFile("data/time_pattern.regex"))).readLine());
+            FORMATTER_DAY = new DateTimeFormatterBuilder()
+                    .appendValue(ChronoField.YEAR)
+                    .appendLiteral('-')
+                    .appendValue(ChronoField.MONTH_OF_YEAR)
+                    .appendLiteral('-')
+                    .appendValue(ChronoField.DAY_OF_MONTH)
+                    .appendLiteral(' ')
+                    .appendValue(ChronoField.HOUR_OF_DAY)
+                    .appendLiteral(':')
+                    .appendValue(ChronoField.MINUTE_OF_HOUR)
+                    .appendLiteral(' ')
+                    .appendZoneOrOffsetId()
+                    .toFormatter();
+        } catch (IOException e) {
+            throw new ExceptionInInitializerError(e);
+        }
+    }
 
     @Override
     public void onMessageCreate(MessageCreateEvent event) {
