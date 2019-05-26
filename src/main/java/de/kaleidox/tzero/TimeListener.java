@@ -130,7 +130,11 @@ public enum TimeListener implements MessageCreateListener {
             }
         }
 
-        return String.format("%s %d:%2d", dateFormatter.format(time), timeAsInts[0], timeAsInts[1]);
+        return String.format("%s %s:%s", dateFormatter.format(time), adjustInt(timeAsInts[0]), adjustInt(timeAsInts[1]));
+    }
+
+    private static String adjustInt(int value) {
+        return (value < 10 ? "0" + value : String.valueOf(value));
     }
 
     private static int[] offsetAsInts(ZonedDateTime time) {
