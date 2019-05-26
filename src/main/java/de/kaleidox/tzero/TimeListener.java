@@ -9,18 +9,16 @@ import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAccessor;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import de.kaleidox.javacord.util.ui.embed.DefaultEmbedFactory;
 
 import org.javacord.api.entity.message.Message;
+import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.entity.user.User;
 import org.javacord.api.event.message.MessageCreateEvent;
 import org.javacord.api.event.message.reaction.ReactionAddEvent;
@@ -29,15 +27,14 @@ import org.javacord.api.event.message.reaction.SingleReactionEvent;
 import org.javacord.api.listener.message.MessageCreateListener;
 import org.javacord.api.listener.message.reaction.ReactionAddListener;
 import org.javacord.api.listener.message.reaction.ReactionRemoveListener;
+import org.javacord.api.util.logging.ExceptionLogger;
 import org.jetbrains.annotations.Nullable;
 
 public enum TimeListener implements MessageCreateListener {
     INSTANCE;
 
     public static final String CLOCK_EMOJI = "⏰";
-
     public static final Pattern TIME_PATTERN = Pattern.compile(".*?(\\s(?<hour>([012]?\\d)))([:.\\s](?<minute>\\d{2}))?(\\s??(?<ampm>[ap]m))?.*?");
-
     public static final DateTimeFormatter FORMATTER_DAY = new DateTimeFormatterBuilder()
             .appendValue(ChronoField.YEAR)
             .appendLiteral('-')
@@ -91,7 +88,6 @@ public enum TimeListener implements MessageCreateListener {
             TimeConverter converter = new TimeConverter(targetTime, optionalUser.get());
             message.addReaction(CLOCK_EMOJI);
             message.addReactionAddListener(converter);
-            message.addReactionRemoveListener(converter);
         } catch (DateTimeParseException ignored) {
         }
     }
@@ -149,22 +145,15 @@ public enum TimeListener implements MessageCreateListener {
         return yields;
     }
 
-    private class TimeConverter implements ReactionAddListener, ReactionRemoveListener {
+    private class TimeConverter implements ReactionAddListener {
         private final ZonedDateTime originTime;
         private final User originUser;
         private final ZoneId originZone;
-        private final List<User> targetedUsers;
-        private final AtomicReference<Message> sentMessage;
 
         public TimeConverter(ZonedDateTime originTime, User originUser) {
             this.originTime = originTime;
             this.originUser = originUser;
             this.originZone = originTime.getZone();
-
-            this.targetedUsers = new ArrayList<>();
-            this.sentMessage = new AtomicReference<>(null);
-
-            targetedUsers.add(originUser);
         }
 
         @Override
@@ -172,36 +161,49 @@ public enum TimeListener implements MessageCreateListener {
             handleReaction(event);
         }
 
-        @Override
-        public void onReactionRemove(ReactionRemoveEvent event) {
-            handleReaction(event);
-        }
-
         private synchronized void handleReaction(SingleReactionEvent event) {
             User targetUser = event.getUser();
             if (targetUser.isBot()) return;
-            if (targetedUsers.contains(targetUser)) return;
+            if (originUser.equals(event.getUser())) return;
             if (!event.getEmoji().asUnicodeEmoji().map(CLOCK_EMOJI::equals).orElse(false)) return;
 
-            String target = formatZonedTime(TimezoneManager.INSTANCE.translate(originTime, originUser, targetUser));
+            TimeZone targetZone = TimezoneManager.INSTANCE.getZone(targetUser);
+            EmbedBuilder embed = DefaultEmbedFactory.create();
 
-            if (sentMessage.get() == null) event.requestMessage()
+            embed.addField(originUser.getName() + " [" + originZone.getId() + "] mentioned the time:", formatZonedTime(originTime))
+                    .addField("For " + targetUser.getName() + " [" + targetZone.getID() + "] this is at:",
+                            formatZonedTime(TimezoneManager.INSTANCE.translate(originTime, originUser, targetUser)))
+                    .setFooter("This message will self-delete in 30 seconds.");
+
+            event.requestMessage()
                     .thenApply(Message::getChannel)
-                    .thenCompose(tc -> tc.sendMessage(DefaultEmbedFactory.create()
-                            .setDescription(originUser.getName() + " said:\n" +
-                                    formatZonedTime(originTime.withZoneSameLocal(originZone)))
-                            .addField("For " + targetUser.getName() + " that is:", target)
-                    ))
-                    .thenAccept(sentMessage::set);
-            else sentMessage.get()
-                    .edit(sentMessage.get()
-                            .getEmbeds()
-                            .get(0)
-                            .toBuilder()
-                            .addField("For " + targetUser.getName() + " that is:", target)
-                    );
+                    .thenCompose(tc -> tc.sendMessage(embed))
+                    .thenAccept(msg -> event.requestMessage()
+                            .thenAccept(prv -> prv.addReactionRemoveListener(new Deleter(prv, msg, targetUser))
+                                    .removeAfter(30, TimeUnit.SECONDS)
+                                    .addRemoveHandler(msg::delete)))
+                    .exceptionally(ExceptionLogger.get());
+        }
 
-            targetedUsers.add(targetUser);
+        private class Deleter implements ReactionRemoveListener {
+            private final Message attached;
+            private final Message target;
+            private final User targetUser;
+
+            public Deleter(Message attached, Message target, User targetUser) {
+                this.attached = attached;
+                this.target = target;
+                this.targetUser = targetUser;
+            }
+
+            @Override
+            public void onReactionRemove(ReactionRemoveEvent event) {
+                if (!event.getUser().equals(targetUser)) return;
+                if (!event.getEmoji().asUnicodeEmoji().map(CLOCK_EMOJI::equals).orElse(false)) return;
+
+                target.delete().exceptionally(ExceptionLogger.get());
+                attached.removeMessageAttachableListener(this);
+            }
         }
     }
 }
