@@ -1,0 +1,40 @@
+group 'de.kaleidox'
+version '0.10'
+
+apply plugin: 'java'
+apply plugin: 'application'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+mainClassName = 'de.kaleidox.TZero'
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+    options.incremental = true
+}
+
+repositories {
+    jcenter()
+    maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+    maven { url "https://jitpack.io" }
+}
+
+dependencies {
+    // Javacord
+    //implementation 'org.javacord:javacord:3.0.+'
+    implementation 'com.github.burdoto:Javacord:437e5907f9'
+
+    // Javacord Utilities
+    implementation('de.kaleidox:javacord-utilities:1.0.1')
+            { exclude group: 'org.javacord' }
+
+    // Other dependencies
+    implementation 'com.github.DiscordBotList:DBL-Java-Library:2.0.1'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.3'
+
+    // Runtime logger dependency
+    runtimeOnly 'org.apache.logging.log4j:log4j-core:2.11.0'
+    
+    // Annotations dependency
+    compileOnly 'org.jetbrains:annotations:17.0.0'
+}
