@@ -12,7 +12,7 @@ There is no such thing as "setup" required for T-Zero. It only requires a timezo
 
 Timezones are parsed using [TimeZone#getTimeZone](https://docs.oracle.com/javase/7/docs/api/java/util/TimeZone.html#getTimeZone(java.lang.String) in the Java runtime. Valid schemes can be found in the [TimeZone documentation](https://docs.oracle.com/javase/7/docs/api/java/util/TimeZone.html) for the Oracle Java Runtime.
 
-Basically, values like `GMT+2`, `UTC` or such are allowed. Locations, like cities or countries are not allowed.  
+Basically, values baset on the Greenwich Mean Time (GMT), like `GMT+2` are allowed. Locations, like cities or countries are not allowed.  
 
 ## All TempVoicer commands
 ### VoiceChannel commands
