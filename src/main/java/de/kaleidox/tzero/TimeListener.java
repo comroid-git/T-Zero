@@ -58,11 +58,12 @@ public enum TimeListener implements MessageCreateListener {
             User user = optionalUser.get();
             TimeZone targetZone = TimezoneManager.INSTANCE.getZone(optionalUser.get());
             Matcher matcher = TIME_PATTERN.matcher(event.getReadableMessageContent());
-            String hourEx, ampmEx;
+            String hourEx, ampmEx, ampm;
             if (!matcher.matches() || (hourEx = group(matcher, "hour", null)) == null) return;
             int hour = Integer.parseInt(hourEx);
             int minute = Integer.parseInt(group(matcher, "minute", "00"));
-            if (group(matcher, "ampm", "am").equals("pm")) hour += 12;
+            if (!(ampm = group(matcher, "ampm", "")).isEmpty() && hour > 12) return;
+            if (ampm.equals("pm")) hour += 12;
 
             LocalDate targetDate = guessDateFromContent(event.getReadableMessageContent());
 
