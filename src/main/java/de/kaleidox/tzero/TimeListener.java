@@ -118,9 +118,15 @@ public enum TimeListener implements MessageCreateListener {
 
         for (int i = 0; i < offsetAsInts.length; i++) {
             timeAsInts[i] += offsetAsInts[i];
+
+            if (i == 0) if (timeAsInts[0] >= 24) {
+                time = time.plusDays(1);
+                timeAsInts[0] -= 24;
+            }
+
             if (i == 1) if (timeAsInts[1] >= 60) {
                 timeAsInts[0] += 1;
-                timeAsInts[1] = timeAsInts[1] - 60;
+                timeAsInts[1] -= 60;
             }
         }
 
