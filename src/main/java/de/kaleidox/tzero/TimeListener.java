@@ -181,7 +181,10 @@ public enum TimeListener implements MessageCreateListener {
                     .thenAccept(msg -> event.requestMessage()
                             .thenAccept(prv -> prv.addReactionRemoveListener(new Deleter(prv, msg, targetUser))
                                     .removeAfter(30, TimeUnit.SECONDS)
-                                    .addRemoveHandler(msg::delete)))
+                                    .addRemoveHandler(() -> {
+                                        msg.delete();
+                                        prv.removeReactionsByEmoji(targetUser, CLOCK_EMOJI);
+                                    })))
                     .exceptionally(ExceptionLogger.get());
         }
 
@@ -202,6 +205,7 @@ public enum TimeListener implements MessageCreateListener {
                 if (!event.getEmoji().asUnicodeEmoji().map(CLOCK_EMOJI::equals).orElse(false)) return;
 
                 target.delete().exceptionally(ExceptionLogger.get());
+                attached.removeReactionsByEmoji(targetUser, CLOCK_EMOJI);
                 attached.removeMessageAttachableListener(this);
             }
         }
