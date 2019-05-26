@@ -1,5 +1,5 @@
 group 'de.kaleidox'
-version '0.10'
+version '0.20'
 
 apply plugin: 'java'
 apply plugin: 'application'
