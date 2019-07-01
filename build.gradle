@@ -33,7 +33,7 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.9'
 
     // Runtime logger dependency
-    runtimeOnly 'org.apache.logging.log4j:log4j-core:2.11.2'
+    runtimeOnly 'org.apache.logging.log4j:log4j-core:2.12.0'
     
     // Annotations dependency
     compileOnly 'org.jetbrains:annotations:17.0.0'
