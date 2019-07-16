@@ -30,7 +30,7 @@ dependencies {
 
     // Other dependencies
     implementation 'com.github.DiscordBotList:DBL-Java-Library:2.0.1'
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.9'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.9.1'
 
     // Runtime logger dependency
     runtimeOnly 'org.apache.logging.log4j:log4j-core:2.11.2'
