@@ -1,4 +1,4 @@
-package de.kaleidox.tzero;
+package de.comroid.tzero;
 
 import java.io.Closeable;
 import java.io.File;
@@ -11,7 +11,7 @@ import java.util.Properties;
 import java.util.TimeZone;
 import java.util.concurrent.ConcurrentHashMap;
 
-import de.kaleidox.util.files.FileProvider;
+import de.comroid.util.files.FileProvider;
 
 import org.javacord.api.entity.user.User;
 import org.jetbrains.annotations.Nullable;

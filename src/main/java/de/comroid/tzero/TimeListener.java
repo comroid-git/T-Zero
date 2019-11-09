@@ -1,4 +1,4 @@
-package de.kaleidox.tzero;
+package de.comroid.tzero;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -18,8 +18,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import de.kaleidox.javacord.util.ui.embed.DefaultEmbedFactory;
-import de.kaleidox.util.files.FileProvider;
+import de.comroid.javacord.util.ui.embed.DefaultEmbedFactory;
+import de.comroid.util.files.FileProvider;
 
 import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.message.embed.EmbedBuilder;

@@ -1,4 +1,4 @@
-group 'de.kaleidox'
+group 'de.comroid'
 version '0.21'
 
 apply plugin: 'java'
@@ -6,7 +6,7 @@ apply plugin: 'application'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
-mainClassName = 'de.kaleidox.TZero'
+mainClassName = 'de.comroid.TZero'
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
@@ -25,11 +25,11 @@ dependencies {
     implementation 'com.github.burdoto:Javacord:437e5907f9'
 
     // Javacord Utilities
-    implementation('de.kaleidox:javacord-utilities:1.0.2rev1')
+    implementation('de.comroid:javacord-utilities:1.1.0')
             { exclude group: 'org.javacord' }
 
     // Other dependencies
-    implementation 'com.github.DiscordBotList:DBL-Java-Library:2.0.1'
+    implementation 'com.github.DiscordBotList:DBL-Java-Library:2.0.1' // todo update
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.10.0'
 
     // Runtime logger dependency

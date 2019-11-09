@@ -1,4 +1,4 @@
-package de.kaleidox;
+package de.comroid;
 
 import java.awt.Color;
 import java.io.BufferedReader;
@@ -7,15 +7,15 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-import de.kaleidox.javacord.util.commands.CommandHandler;
-import de.kaleidox.javacord.util.server.properties.ServerPropertiesManager;
-import de.kaleidox.javacord.util.ui.embed.DefaultEmbedFactory;
-import de.kaleidox.tzero.TimeListener;
-import de.kaleidox.tzero.TimezoneManager;
-import de.kaleidox.tzero.commands.AdminCommands;
-import de.kaleidox.tzero.commands.BasicCommands;
-import de.kaleidox.tzero.commands.TimezoneCommands;
-import de.kaleidox.util.files.FileProvider;
+import de.comroid.javacord.util.commands.CommandHandler;
+import de.comroid.javacord.util.server.properties.ServerPropertiesManager;
+import de.comroid.javacord.util.ui.embed.DefaultEmbedFactory;
+import de.comroid.tzero.TimeListener;
+import de.comroid.tzero.TimezoneManager;
+import de.comroid.tzero.commands.AdminCommands;
+import de.comroid.tzero.commands.BasicCommands;
+import de.comroid.tzero.commands.TimezoneCommands;
+import de.comroid.util.files.FileProvider;
 
 import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
@@ -54,10 +54,10 @@ public final class TZero {
             PROP = new ServerPropertiesManager(FileProvider.getFile("data/properties.json"));
             PROP.usePropertyCommand(null, CMD);
             PROP.register("bot.prefix", CMD.prefixes[0])
-                    .setDisplayName("Custom Command Prefix")
-                    .setDescription("A custom prefix to call bot commands with");
+                    .withDisplayName("Custom Command Prefix")
+                    .withDescription("A custom prefix to call bot commands with");
 
-            CMD.useCustomPrefixes(PROP.getProperty("bot.prefix"), false);
+            CMD.withCustomPrefixProvider(PROP.getProperty("bot.prefix"));
 
             API.getThreadPool()
                     .getScheduler()

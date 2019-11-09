@@ -1,8 +1,8 @@
-package de.kaleidox.tzero.commands;
+package de.comroid.tzero.commands;
 
-import de.kaleidox.javacord.util.commands.Command;
-import de.kaleidox.javacord.util.commands.CommandGroup;
-import de.kaleidox.javacord.util.ui.embed.DefaultEmbedFactory;
+import de.comroid.javacord.util.commands.Command;
+import de.comroid.javacord.util.commands.CommandGroup;
+import de.comroid.javacord.util.ui.embed.DefaultEmbedFactory;
 
 import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.user.User;

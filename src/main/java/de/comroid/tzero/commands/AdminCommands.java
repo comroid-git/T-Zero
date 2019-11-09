@@ -1,6 +1,6 @@
-package de.kaleidox.tzero.commands;
+package de.comroid.tzero.commands;
 
-import de.kaleidox.javacord.util.commands.Command;
+import de.comroid.javacord.util.commands.Command;
 
 import org.javacord.api.entity.user.User;
 

@@ -1,4 +1,4 @@
-package de.kaleidox.util.files;
+package de.comroid.util.files;
 
 public class OSValidator {
     private static String OS = System.getProperty("os.name").toLowerCase();
