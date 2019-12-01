@@ -2,7 +2,7 @@
 FROM adoptopenjdk/openjdk11:alpine
 RUN adduser -h /app -D exec
 
-ADD ./build/install/%Project_Name% /app/binaries
+ADD ./build/install/T-Zero /app/binaries
 VOLUME /app/data
 
 # Permission Management
@@ -14,4 +14,4 @@ WORKDIR /app
 RUN ls -AlhX
 
 # GO
-ENTRYPOINT /app/binaries/bin/%Project_Name%
+ENTRYPOINT /app/binaries/bin/T-Zero

@@ -2,8 +2,8 @@ version: "2.0"
 
 services:
     cobalton:
-        image: %project_name%:public
-        container_name: %project_name%-public
+        image: tzero:public
+        container_name: tzero-public
         restart: on-failure
         build:
             context: .
@@ -11,4 +11,4 @@ services:
         volumes:
             - /var/bots/%Project_Name%:/app/data:rw
         working_dir: /app
-        entrypoint: /app/binaries/bin/%Project_Name%
+        entrypoint: /app/binaries/bin/T-Zero
