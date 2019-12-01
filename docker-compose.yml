@@ -9,6 +9,6 @@ services:
             context: .
             dockerfile: Dockerfile
         volumes:
-            - /var/bots/%Project_Name%:/app/data:rw
+            - /var/bots/T-Zero:/app/data:rw
         working_dir: /app
         entrypoint: /app/binaries/bin/T-Zero
