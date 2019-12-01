@@ -1,0 +1,18 @@
+task dockerCompose(type: Exec, dependsOn: 'installDist') {
+    executable = 'docker-compose'
+    args = ['up', '-d', '--build', '--force-recreate']
+}
+
+task dockerDestroy(dependsOn: ['dockerStop', 'dockerRemove'])
+
+task dockerStop(type: Exec) {
+    executable = 'docker'
+    args = ['stop', dockerContainerName]
+}
+
+task dockerRemove(type: Exec) {
+    executable = 'docker'
+    args = ['rm', dockerContainerName]
+}
+
+tasks.findByName('dockerRemove').mustRunAfter('dockerStop')

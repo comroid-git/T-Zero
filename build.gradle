@@ -1,12 +1,20 @@
+apply plugin: 'application'
+
 group 'de.comroid'
 version '0.21'
 
-apply plugin: 'java'
-apply plugin: 'application'
+apply from: 'gradle/ext.gradle'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 mainClassName = 'de.comroid.TZero'
+
+wrapper {
+    gradleVersion = '5.6'
+    distributionUrl = "https://services.gradle.org/distributions/gradle-$gradleVersion-all.zip"
+}
+
+apply from: 'gradle/docker.gradle'
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
