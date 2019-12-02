@@ -21,24 +21,19 @@ tasks.withType(JavaCompile) {
     options.incremental = true
 }
 
-repositories {
-    jcenter()
-    maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
-    maven { url "https://jitpack.io" }
-}
+repositories.jcenter()
 
 dependencies {
     // Javacord
-    //implementation 'org.javacord:javacord:3.0.+'
-    implementation 'com.github.burdoto:Javacord:437e5907f9'
+    implementation 'org.javacord:javacord:3.0.5'
 
     // Javacord Utilities
     implementation('de.comroid:javacord-utilities:1.1.0')
             { exclude group: 'org.javacord' }
 
     // Other dependencies
-    implementation 'com.github.DiscordBotList:DBL-Java-Library:2.0.1' // todo update
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.10.1'
+    implementation 'de.kaleidox:discordbotlist-stats-javacord:0.1.3'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.10.0'
 
     // Runtime logger dependency
     runtimeOnly 'org.apache.logging.log4j:log4j-core:2.12.1'
