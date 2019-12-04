@@ -10,7 +10,7 @@ targetCompatibility = 1.8
 mainClassName = 'de.comroid.TZero'
 
 wrapper {
-    gradleVersion = '6.0'
+    gradleVersion = '5.6'
     distributionUrl = "https://services.gradle.org/distributions/gradle-$gradleVersion-all.zip"
 }
 
@@ -21,11 +21,15 @@ tasks.withType(JavaCompile) {
     options.incremental = true
 }
 
-repositories.jcenter()
+repositories {
+    jcenter()
+    maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+    maven { url "https://jitpack.io" }
+}
 
 dependencies {
     // Javacord
-    implementation 'org.javacord:javacord:3.0.5'
+    implementation 'org.javacord:javacord:3.0.4'
 
     // Javacord Utilities
     implementation('de.comroid:javacord-utilities:1.1.0')
