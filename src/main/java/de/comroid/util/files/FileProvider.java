@@ -13,7 +13,7 @@ import static java.io.File.separatorChar;
 
 public class FileProvider {
     public final static Logger logger = LogManager.getLogger();
-    private final static String PREFIX = "/app/data/";
+    private final static String PREFIX = "/var/dcb/tzero/";
 
     public static File getFile(String subPath) {
         final String path = (PREFIX + subPath).replace('/', separatorChar);
