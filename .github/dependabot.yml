@@ -1,0 +1,43 @@
+version: 2
+registries:
+  maven-repository-maven-jetbrains-space-comroid-snapshot:
+    type: maven-repository
+    url: https://maven.jetbrains.space/comroid/snapshot
+    username: Anonymous.User
+    password: "${{secrets.MAVEN_REPOSITORY_MAVEN_JETBRAINS_SPACE_COMROID_SNAPSHOT_PASSWORD}}"
+  maven-repository-maven-jetbrains-space-comroid-release:
+    type: maven-repository
+    url: https://maven.jetbrains.space/comroid/release
+    username: Anonymous.User
+    password: "${{secrets.MAVEN_REPOSITORY_MAVEN_JETBRAINS_SPACE_COMROID_RELEASE_PASSWORD}}"
+  maven-repository-maven-jetbrains-space-comroid-repo:
+    type: maven-repository
+    url: https://maven.jetbrains.space/comroid/repo
+    username: Anonymous.User
+    password: "${{secrets.MAVEN_REPOSITORY_MAVEN_JETBRAINS_SPACE_COMROID_REPO_PASSWORD}}"
+
+updates:
+- package-ecosystem: gradle
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "00:00"
+    timezone: Europe/Berlin
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: org.javacord:javacord
+    versions:
+    - 3.2.0
+    - 3.3.0
+    - v3.1.2
+  - dependency-name: com.fasterxml.jackson.core:jackson-databind
+    versions:
+    - 2.12.1
+    - 2.12.2
+  - dependency-name: org.apache.logging.log4j:log4j-core
+    versions:
+    - 2.14.0
+  registries:
+  - maven-repository-maven-jetbrains-space-comroid-snapshot
+  - maven-repository-maven-jetbrains-space-comroid-release
+  - maven-repository-maven-jetbrains-space-comroid-repo
